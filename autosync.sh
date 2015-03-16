@@ -3,7 +3,7 @@
 #
 # autosync.sh - automatically synchronize folders between multiple clients via ssh/rsync
 #
-# Author: Achim Christ
+# Author: acch
 # Version: 1.0
 # Depends: sync.sh, inotify-tools
 #
