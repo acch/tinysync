@@ -4,20 +4,18 @@
 # sync.sh - synchronize folders between multiple clients via ssh/rsync
 #
 # Author: acch
-# Version: 1.10
 # Depends: openssh, rsync
 #
 # To activate scheduled snycing, add the following line to your crontab (crontab -e):
-# */10 * * * * /home/achim/bin/sync.sh &>> /var/log/sync.err
+# */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
 #
 
 # -------------- Options --------------
-directory=".secret_encfs"
-local_user="???"
+directory="YOUR_DIRECTORY"
+local_user="YOUR_USER"
 remote_user="tinysync"
 key="/home/$local_user/.ssh/id_rsa_tinysync"
-#key="/home/$local_user/.ssh/id_rsa"
-host="???"
+host="YOUR_SERVER"
 logfile="/var/log/sync.log"
 local_lockfile="/tmp/sync.lck"
 remote_lockfile="/tmp/sync.lck"
@@ -35,7 +33,7 @@ acquire_local_lock () {
   fi
 
   # Acquire local lock
-  hostname > $local_lockfile
+  touch $local_lockfile
 }
 
 acquire_server_lock () {
@@ -219,7 +217,6 @@ if [ "$force" -eq 1 ] || check_network; then
     else
       # Find latest mtime in local and server copy
       local_mtime=$(find /home/$local_user/$directory -printf "%Ts\n" | sort -g | tail -n 1)
-#      server_mtime=$($rsh "find $homedir/$directory -printf '%Ts\n' | sort -g | tail -n 1")
       server_mtime=$($rsh "cat /home/$remote_user/sync.tim")
 
       # Compare mtimes
