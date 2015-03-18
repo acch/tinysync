@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=/home/achim/bin/autosync.sh
+Exec=/path/to/autosync.sh
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
