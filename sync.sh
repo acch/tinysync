@@ -10,19 +10,41 @@
 # */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
 #
 
-# -------------- Options --------------
-directory="YOUR_DIRECTORY"
-local_user="YOUR_USER"
-remote_user="tinysync"
-key="/home/$local_user/.ssh/id_rsa_tinysync"
-host="YOUR_SERVER"
-logfile="/var/log/sync.log"
-local_lockfile="/tmp/sync.lck"
-remote_lockfile="/tmp/sync.lck"
-maxwait=10
-port=1602
-interface=em1
-# -------------------------------------
+# Gather information about the environment
+basedir=$(dirname "$0")
+local_user=$(whoami)
+
+load_config () {
+  # Load configuration from file
+  if [ ! -f "$basedir/sync.conf" ]; then
+    echo "[`date`] Config file not found: $basedir/sync.conf"
+    echo "Please copy the sample config file and edit it accordingly"
+    return 1
+  fi
+
+  source $basedir/sync.conf
+
+  # Compile SSH command
+  rsh="/usr/bin/ssh \
+    -o PasswordAuthentication=no \
+    -o PubkeyAuthentication=yes \
+    -l $remote_user \
+    -i $key \
+    -p $port \
+    $host"
+
+  # Compile RSYNC command
+  rsync_test="/usr/bin/rsync \
+    -vnauz --delete"
+  rsync="/usr/bin/rsync \
+    -auz --delete"
+  rsync_ssh_opts="/usr/bin/ssh \
+    -o PasswordAuthentication=no \
+    -o PubkeyAuthentication=yes \
+    -l $remote_user \
+    -i $key \
+    -p $port"
+}
 
 acquire_local_lock () {
   # Check for existence of local lock
@@ -156,34 +178,21 @@ prune_log () {
   fi
 }
 
+
+
+###############################################################################
+# Main starts here
+###############################################################################
+
+# Load configuration
+if ! load_config; then
+  exit 1
+fi
+
 # Check for force option
 if [ $# -gt 0 ] && [ "$1" == "--force" ]; then force=1
 else force=0
 fi
-
-# Compile SSH command
-rsh="/usr/bin/ssh \
-  -o PasswordAuthentication=no \
-  -o PubkeyAuthentication=yes \
-  -l $remote_user \
-  -i $key \
-  -p $port \
-  $host"
-
-# Compile RSYNC command
-rsync_test="/usr/bin/rsync \
-  -vnauz --delete"
-rsync="/usr/bin/rsync \
-  -auz --delete"
-rsync_ssh_opts="/usr/bin/ssh \
-  -l $remote_user \
-  -i $key \
-  -p $port"
-
-
-#
-# Main starts here
-#
 
 # Initialize
 init_log
@@ -193,7 +202,7 @@ if ! acquire_local_lock; then
   exit 1
 fi
 
-# Sleep up to 10 secs (force option overrides)
+# Sleep up to $maxwait seconds (force option overrides)
 if [ "$force" -eq 0 ]; then sleep $(( $RANDOM % $maxwait )); fi
 
 # Check for connectivity (force option overrides)

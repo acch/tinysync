@@ -1,0 +1,13 @@
+# -------------- Options --------------
+directory="YOUR_DIRECTORY"
+#local_user="YOUR_USER"
+remote_user="tinysync"
+key="/home/$local_user/.ssh/id_rsa_tinysync"
+host="YOUR_SERVER"
+logfile="/var/log/sync.log"
+local_lockfile="/tmp/sync.lck"
+remote_lockfile="/tmp/sync.lck"
+maxwait=10
+port=1602
+interface=em1
+# -------------------------------------
