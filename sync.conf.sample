@@ -2,14 +2,14 @@
 directory="YOUR_DIRECTORY"
 #local_user="YOUR_USER"
 remote_user="tinysync"
-key="/home/$local_user/.ssh/id_rsa_tinysync"
+ssh_key="/home/$local_user/.ssh/id_rsa_tinysync"
 host="YOUR_SERVER"
 logfile="/var/log/sync.log"
 local_lockfile="/tmp/sync.lck"
 remote_lockfile="/tmp/sync.lck"
-maxwait=10
-port=1602
+sched_wait=10
+auto_wait=30
+ssh_port=1602
 interface=em1
 events="-e close_write -e move -e delete"
-wait=30
 # -------------------------------------

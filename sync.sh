@@ -29,8 +29,8 @@ load_config () {
     -o PasswordAuthentication=no \
     -o PubkeyAuthentication=yes \
     -l $remote_user \
-    -i $key \
-    -p $port \
+    -i $ssh_key \
+    -p $ssh_port \
     $host"
 
   # Compile RSYNC command
@@ -42,8 +42,8 @@ load_config () {
     -o PasswordAuthentication=no \
     -o PubkeyAuthentication=yes \
     -l $remote_user \
-    -i $key \
-    -p $port"
+    -i $ssh_key \
+    -p $ssh_port"
 }
 
 acquire_local_lock () {
@@ -202,8 +202,8 @@ if ! acquire_local_lock; then
   exit 1
 fi
 
-# Sleep up to $schedwait seconds (force option overrides)
-if [ "$force" -eq 0 ]; then sleep $(( $RANDOM % $schedwait )); fi
+# Sleep up to $sched_wait seconds (force option overrides)
+if [ "$force" -eq 0 ]; then sleep $(( $RANDOM % $sched_wait )); fi
 
 # Check for connectivity (force option overrides)
 if [ "$force" -eq 1 ] || check_network; then

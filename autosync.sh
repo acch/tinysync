@@ -41,7 +41,7 @@ while true
 do
 	inotifywait -qqr $events /home/$local_user/$directory
 	
-	sleep $autowait
+	sleep $auto_wait
 
 	$basedir/sync.sh
 done
