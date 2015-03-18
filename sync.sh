@@ -202,8 +202,8 @@ if ! acquire_local_lock; then
   exit 1
 fi
 
-# Sleep up to $maxwait seconds (force option overrides)
-if [ "$force" -eq 0 ]; then sleep $(( $RANDOM % $maxwait )); fi
+# Sleep up to $schedwait seconds (force option overrides)
+if [ "$force" -eq 0 ]; then sleep $(( $RANDOM % $schedwait )); fi
 
 # Check for connectivity (force option overrides)
 if [ "$force" -eq 1 ] || check_network; then
