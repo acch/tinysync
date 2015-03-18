@@ -9,19 +9,33 @@
 # To activate automatic snycing, run this script upon startup (gnome-session-properties)
 #
 
-# -------------- Options --------------
-directory="YOUR_DIRECTORY"
-local_user="YOUR_USER"
-script="/path/to/sync.sh"
-events="-e close_write -e move -e delete"
-wait=30
-# -------------------------------------
+# Gather information about the environment
+basedir=$(dirname "$0")
+local_user=$(whoami)
 
-#
+load_config () {
+  # Load configuration from file
+  if [ ! -f "$basedir/sync.conf" ]; then
+    echo "[`date`] Config file not found: $basedir/sync.conf"
+    echo "Please copy the sample config file and edit it accordingly"
+    return 1
+  fi
+
+  source $basedir/sync.conf
+}
+
+
+
+###############################################################################
 # Main starts here
-#
+###############################################################################
 
-$script
+# Load configuration
+if ! load_config; then
+  exit 1
+fi
+
+$basedir/sync.sh
 
 while true
 do
@@ -29,7 +43,7 @@ do
 	
 	sleep $wait
 
-	$script
+	$basedir/sync.sh
 done
 
 exit 0

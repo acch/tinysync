@@ -10,4 +10,6 @@ remote_lockfile="/tmp/sync.lck"
 maxwait=10
 port=1602
 interface=em1
+events="-e close_write -e move -e delete"
+wait=30
 # -------------------------------------
