@@ -4,7 +4,4 @@ Exec=/path/to/autosync.sh
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
-Name[en_US]=Autosync
 Name=Autosync
-Comment[en_US]=
-Comment=
