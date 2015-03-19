@@ -1,14 +1,28 @@
 # Tinysync
 
-Tinysync is a simple tool for keeping a directory synchronized between different computers.
-Its primary design goal is to be small, lightweight, and not require any additional software to accomplish this task.
+Tinysync is a simple tool for keeping a directory synchronized between multiple computer systems.
+Its primary design goal is to be small, lightweight, and not require additional software to accomplish this task.
 
 Tinysync is based on [Bash](https://www.gnu.org/software/bash/) and [rsync](https://rsync.samba.org/) - it is known to run on Linux and BSD, but should work on any Unix-compatible operating system.
 Tinysync requires a central server to synchronize data with, but in fact does not require installation of any software on this server.
 
+---
+
+### What it is designed for:
+- A single user, working on different computers during different times of the day
+
+### What it is *not* designed for:
+- A single user, working on different computers simultaneously
+- Multiple users sharing files with each other
+
+### Important
+Tinysync does not implement logic for locking files or resolving conflicts. If files are modified on different clients simultaneously then some of these changes will get lost!
+
+---
+
 ## Components
 
-- **_sync.conf_**
+- **_ sync.conf _**
   The configuration file which includes your personal information such as server address and user name
 - **sync.conf.sample**
   Sample configuration file which which needs to be copied and edited
@@ -17,37 +31,46 @@ Tinysync requires a central server to synchronize data with, but in fact does no
 - **sync.desktop**
   Optional desktop entry which can be used to manually run `sync.sh`
 - **autosync.sh**
-  An optional script which will enable automatic synchronization when something in the directory changes
+  Optional executable script which will enable automatic synchronization when something in the directory changes
 - **autosync.desktop**
-  Optional desktop entry which can be used to automatically run the `autosync.sh` script upon startup
+  Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
 
 
 ## Installation
 
-Tinysync requires SSH Public-Key Authentication (a.k.a. Password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
+1. Download Tinysync to a client, extract the archive (if applicable), and place the files in a directory of your choice.
 
-Tinysync runs on the client. The server needs to accept SSH connections, only.
+2. Copy the sample configuration file and modify it according to your setup
 
-In a typical scenario you will need to run `sync.sh` repeatedly, e.g. via cron. You should add something like the following to your crontab (`crontab -e`):
+   ```
+   cp sync.conf.sample sync.conf
+   vi sync.conf
+   ```
 
-```
-*/10 * * * * /path/to/sync.sh &>> /var/log/sync.err
-```
+3. Tinysync relies on SSH Public-Key Authentication (a.k.a. Password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
+   Ensure that rsync is installed on both, client and server.
 
-This will enable scheduled synchronization. You can also enable automatic synchronization using the `autosync.sh` script. It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
+4. In a typical usage scenario you should run `sync.sh` repeatedly, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
 
-Note that automatic synchronization using the `autosync.sh` script is optional. Even if you enable automatic synchronization it is still recommended to configure scheduled replication (via cron) in addition to that.
+   ```
+   */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
+   ```
 
-To enable automatic synchronization, you should run `autosync.desktop` automatically upon startup. There are numerous mechanisms you can use:
+5. You can also enable automatic synchronization using `autosync.sh`.
+   It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
 
-### Gnome Desktop
+   Note that automatic synchronization using `autosync.sh` is optional. Even if you enable automatic synchronization you should still configure scheduled replication (via cron) in addition to that.
 
-For Gnome on Linux you should copy the `autosync.desktop` file to the folder `~/.config/autostart/`
+   To enable automatic synchronization, run `autosync.sh` upon startup. There are numerous mechanisms you can use:
 
-### KDE Desktop
+   ### Gnome Desktop
 
-For KDE on Linux you should create a symbolic link to `autosync.sh` in the folder `~/.kde/Autostart/`
+   For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`.
 
-### Systemd
+   ### KDE Desktop
 
-Coming soon...
+   For KDE on Linux create a symbolic link to `autosync.sh` in the folder `~/.kde/Autostart/`.
+
+   ### Systemd
+
+   Coming soon...
