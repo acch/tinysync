@@ -12,11 +12,12 @@
 # Gather information about the environment
 basedir=$(dirname "$0")
 local_user=$(whoami)
+date="/usr/bin/date -R"
 
 load_config () {
   # Load configuration from file
   if [ ! -f "$basedir/sync.conf" ]; then
-    echo "[`date`] Config file not found: $basedir/sync.conf"
+    echo "[`$date`] Config file not found: $basedir/sync.conf"
     echo "Please copy the sample config file and edit it accordingly"
     return 1
   fi
@@ -40,7 +41,7 @@ $basedir/sync.sh
 while true
 do
 	inotifywait -qqr $events /home/$local_user/$directory
-	
+
 	sleep $auto_wait
 
 	$basedir/sync.sh

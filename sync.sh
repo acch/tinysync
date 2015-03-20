@@ -13,12 +13,13 @@
 # Gather information about the environment
 basedir=$(dirname "$0")
 local_user=$(whoami)
+date="/usr/bin/date -R"
 
 load_config () {
   # Load configuration from file
   if [ ! -f "$basedir/sync.conf" ]; then
-    echo "[`date`] Config file not found: $basedir/sync.conf"
-    echo "Please copy the sample config file and edit it accordingly"
+    echo "[`$date`] Config file not found: $basedir/sync.conf"
+    echo "Please copy the sample config file and edit it accordingly."
     return 1
   fi
 
@@ -50,7 +51,7 @@ acquire_local_lock () {
   # Check for existence of local lock
   if [ -f "$local_lockfile" ]; then
     # Lock exists, another instance seems to be running
-    echo "[`date`] Already running - will exit now!" >> $logfile
+    echo "[`$date`] Already running - will exit now!" >> $logfile
     return 1
   fi
 
@@ -62,7 +63,7 @@ acquire_server_lock () {
   # Check for existence of server lock
   if $rsh [ -f "$remote_lockfile" ]; then
     # Lock exists, another instance seems to be running
-    echo "[`date`] Server locked - will exit now!" >> $logfile
+    echo "[`$date`] Server locked - will exit now!" >> $logfile
     return 1
   fi
 
@@ -87,19 +88,19 @@ release_server_lock () {
 check_network () {
   # Check for $interface
   if ! grep -q up /sys/class/net/$interface/operstate; then
-    echo "[`date`] $interface down - will exit now!" >> $logfile
+    echo "[`$date`] $interface down - will exit now!" >> $logfile
     return 1
   fi
 
   # Check for internet connection
   if ! ping -c 1 www.google.com &> /dev/null; then
-    echo "[`date`] No network - will exit now!" >> $logfile
+    echo "[`$date`] No network - will exit now!" >> $logfile
     return 1
   fi
 
   # Check for ssh connectivity
   if ! $rsh ls &> /dev/null; then
-    echo "[`date`] No SSH connection - will exit now!" >> $logfile
+    echo "[`$date`] No SSH connection - will exit now!" >> $logfile
     return 1
   fi
 }
@@ -128,7 +129,7 @@ sync_down () {
 
   if [ "$changes" -gt 4 ]; then
     # Log what we're about to do
-    echo "[`date`] Downloading $(( $changes - 4 )) changes." >> $logfile
+    echo "[`$date`] Downloading $(( $changes - 4 )) changes." >> $logfile
     #notify-send -i down sync.sh "Downloading $(( $changes - 4 )) changes..."
 
     # Download changes
@@ -147,7 +148,7 @@ sync_up () {
 
   if [ "$changes" -gt 4 ]; then
     # Log what we're about to do
-    echo "[`date`] Uploading $(( $changes - 4 )) changes." >> $logfile
+    echo "[`$date`] Uploading $(( $changes - 4 )) changes." >> $logfile
     #notify-send -i up sync.sh "Uploading $(( $changes - 4 )) changes..."
 
     # Upload changes
@@ -164,8 +165,8 @@ init_log () {
   # Check for existence of log file
   if [ ! -f "$logfile" ]; then
     # Initialize new log file
-    echo "[`date`] Starting up!" > $logfile
-  fi 
+    echo "[`$date`] Starting up!" > $logfile
+  fi
 }
 
 prune_log () {
