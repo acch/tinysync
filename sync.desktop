@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Sync
+Exec=/path/to/sync.sh --force
+Icon=mail-send-receive-symbolic
+Hidden=false
+NoDisplay=false
+Terminal=false
