@@ -3,7 +3,7 @@
 Tinysync is a simple tool for keeping a directory synchronized between multiple computer systems.
 Its primary design goal is to be small, lightweight, and not require additional software to accomplish this task.
 
-Tinysync is based on [Bash](https://www.gnu.org/software/bash/) and [rsync](https://rsync.samba.org/) - it is known to run on Linux and BSD, but should work on any Unix-compatible operating system.
+Tinysync is based on [Bash](https://www.gnu.org/software/bash/) and [rsync](https://rsync.samba.org/) - it is known to run on Linux and FreeBSD, but should work on any Unix-compatible operating system.
 Tinysync requires a central server to synchronize data with, but in fact does not require installation of any software on this server.
 
 ---
@@ -46,7 +46,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 3. Tinysync relies on SSH Public-Key Authentication (a.k.a. Password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
    Ensure that rsync is installed on both, client and server.
 
-4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does not exist on the server (it will be uploaded). When adding more clients, ensure that the directory does not exist on the client (it will be downloaded).
+4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does *not* exist on the server (it will be uploaded). When adding more clients, ensure that the directory does *not* exist on the client (it will be downloaded).
 
 5. In a typical usage scenario you should run `sync.sh` repeatedly, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
 
