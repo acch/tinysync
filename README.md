@@ -22,18 +22,14 @@ Tinysync does not implement logic for locking files or resolving conflicts. If f
 
 ## Components
 
-- **_ sync.conf _**
-  The configuration file which includes your personal information such as server address and user name
-- **sync.conf.sample**
-  Sample configuration file which which needs to be copied and edited
-- **sync.sh**
-  The main executable script which synchronizes the directory with the server
-- **sync.desktop**
-  Optional desktop entry which can be used to manually run `sync.sh`
-- **autosync.sh**
-  Optional executable script which will enable automatic synchronization when something in the directory changes
-- **autosync.desktop**
-  Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
+File | Description
+--- | ---
+sync.conf.sample | Sample configuration file which needs to be copied and edited
+*sync.conf* | The configuration file which includes your personal information such as server address and user name
+sync.sh | The main executable script which synchronizes the directory with the server
+sync.desktop | Optional desktop entry which can be used to manually run `sync.sh`
+autosync.sh | Optional executable script which will enable automatic synchronization when something in the directory changes
+autosync.desktop | Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
 
 
 ## Installation
@@ -50,13 +46,15 @@ Tinysync does not implement logic for locking files or resolving conflicts. If f
 3. Tinysync relies on SSH Public-Key Authentication (a.k.a. Password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
    Ensure that rsync is installed on both, client and server.
 
-4. In a typical usage scenario you should run `sync.sh` repeatedly, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
+4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does not exist on the server (it will be uploaded). When adding more clients, ensure that the directory does not exist on the client (it will be downloaded).
+
+5. In a typical usage scenario you should run `sync.sh` repeatedly, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
 
    ```
    */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
    ```
 
-5. You can also enable automatic synchronization using `autosync.sh`.
+6. You can also enable automatic synchronization using `autosync.sh`.
    It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
 
    Note that automatic synchronization using `autosync.sh` is optional. Even if you enable automatic synchronization you should still configure scheduled replication (via cron) in addition to that.
