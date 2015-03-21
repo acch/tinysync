@@ -1,10 +1,10 @@
 # Tinysync
 
-Tinysync is a simple tool for keeping a directory synchronized between multiple computer systems.
+Tinysync is a simple tool for keeping a directory synchronized between multiple computers.
 Its primary design goal is to be small, lightweight, and not require additional software to accomplish this task.
 
 Tinysync is based on [Bash](https://www.gnu.org/software/bash/) and [rsync](https://rsync.samba.org/) - it is known to run on Linux and FreeBSD, but should work on any Unix-compatible operating system.
-Tinysync requires a central server to synchronize data with, but in fact does not require installation of any software on this server.
+The tool requires a central server to synchronize data with, but in fact does not require installation of any software on this server.
 
 ---
 
@@ -24,8 +24,8 @@ Tinysync does not implement logic for locking files or resolving conflicts. If f
 
 File | Description
 --- | ---
-sync.conf.sample | Sample configuration file which needs to be copied and edited
-*sync.conf* | The configuration file which includes your personal information such as server address and user name
+sync.conf.sample | Sample configuration file which needs to be copied and modified according to your setup
+*sync.conf* | The configuration file which includes information about your setup, such as server address and user name
 sync.sh | The main executable script which synchronizes the directory with the server
 sync.desktop | Optional desktop entry which can be used to manually run `sync.sh`
 autosync.sh | Optional executable script which will enable automatic synchronization when something in the directory changes
@@ -34,9 +34,9 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 ## Installation
 
-1. Download Tinysync to a client, extract the archive (if applicable), and place the files in a directory of your choice.
+1. Download the software to a client, extract the archive (if applicable), and place the files in a directory of your choice.
 
-2. Copy the sample configuration file and modify it according to your setup
+2. Copy the sample configuration file and modify it according to your setup:
 
    ```
    cp sync.conf.sample sync.conf
@@ -44,7 +44,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
    ```
 
 3. Tinysync relies on SSH Public-Key Authentication (a.k.a. Password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
-   Ensure that rsync is installed on both, client and server.
+   Ensure that `rsync` is installed on both, client and server.
 
 4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does *not* exist on the server (it will be uploaded). When adding more clients, ensure that the directory does *not* exist on the client (it will be downloaded).
 
@@ -54,7 +54,9 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
    */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
    ```
 
-6. You can also enable automatic synchronization using `autosync.sh`.
+6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry.
+
+7. You can also enable automatic synchronization using `autosync.sh`.
    It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
 
    Note that automatic synchronization using `autosync.sh` is optional. Even if you enable automatic synchronization you should still configure scheduled replication (via cron) in addition to that.
@@ -63,7 +65,11 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
    ### Gnome Desktop
 
-   For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`.
+   For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`. Edit the desktop entry so that is contains the appropriate path to `autosync.sh`:
+
+   ```
+   Exec=/path/to/autosync.sh
+   ```
 
    ### KDE Desktop
 

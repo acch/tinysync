@@ -9,7 +9,7 @@ local_lockfile="/tmp/sync.lck"
 remote_lockfile="/tmp/sync.lck"
 sched_wait=10
 auto_wait=30
-ssh_port=1602
+ssh_port=22
 interface=em1
 events="-e close_write -e move -e delete"
 # -------------------------------------
