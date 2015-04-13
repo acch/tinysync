@@ -57,7 +57,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry. Edit the desktop entry so that is contains the appropriate path to `sync.sh`:
 
   ```
-  Exec=/path/to/autosync.sh
+  Exec=/path/to/sync.sh
   ```
 
 7. You can also enable automatic synchronization using `autosync.sh`.
