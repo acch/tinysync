@@ -54,7 +54,11 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
    */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
    ```
 
-6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry.
+6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry. Edit the desktop entry so that is contains the appropriate path to `sync.sh`:
+
+  ```
+  Exec=/path/to/autosync.sh
+  ```
 
 7. You can also enable automatic synchronization using `autosync.sh`.
    It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
