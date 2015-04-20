@@ -28,7 +28,7 @@ sync.conf.sample | Sample configuration file which needs to be copied and modifi
 *sync.conf* | The configuration file which includes information about your setup, such as server address and user name
 sync.sh | The main executable script which synchronizes the directory with the server
 sync.desktop | Optional desktop entry which can be used to manually run `sync.sh`
-autosync.sh | Optional executable script which will enable automatic synchronization when something in the directory changes
+autosync.sh | Optional executable script which will enable automatic synchronization when the directory is modified
 autosync.desktop | Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
 
 
