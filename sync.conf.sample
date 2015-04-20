@@ -1,15 +1,52 @@
-# -------------- Options --------------
+# ---------------------------------- Options ----------------------------------
+
+# Directory on the client which should be synchronized with the server.
+# A relative path inside the local user's home directory.
 directory="YOUR_DIRECTORY"
+
+# Local user account on the client used to synchronize the directory.
+# The directory must be inside the local user's home directory.
+# If no local user is specified, then the account running the script is used.
 #local_user="YOUR_USER"
+
+# Remote user account on the server used to synchronize the directory.
+# The local user on the client must be able to login as the remote user on the
+#   server.
 remote_user="tinysync"
+
+# SSH key for the local user on the client used to login as the remote user on
+#   the server.
 ssh_key="/home/$local_user/.ssh/id_rsa_tinysync"
+
+# Hostname or IP address of the server used to synchronize the directory.
 host="YOUR_SERVER"
+
+# Absolute path of the log file to which messages and errors are written to.
 logfile="/var/log/sync.log"
+
+# Absolute path of the local lock file on the client.
 local_lockfile="/tmp/sync.lck"
+
+# Absolute path of the remote lock file on the server.
 remote_lockfile="/tmp/sync.lck"
+
+# Maximum number of seconds to wait when running the script (sync.sh).
 sched_wait=10
+
+# Number of seconds to wait after modification of the directory, before it is
+#   synchronized (autosync.sh).
 auto_wait=30
+
+# SSH port to connect to on the server.
 ssh_port=22
+
+# Interface which must be connected when synchronizing the directory.
+# Specify the Ethernet interface (e.g. eth0, em1) to avoid synchronization using
+#   slow / expensive mobile connections.
 interface=em1
+
+# List of events which trigger automatic synchronization of the directory
+#   (autosync.sh).
 events="-e close_write -e move -e delete"
-# -------------------------------------
+
+# -----------------------------------------------------------------------------
