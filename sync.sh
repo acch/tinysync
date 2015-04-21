@@ -87,7 +87,7 @@ release_server_lock () {
 
 check_network () {
   # Check for $interface
-  if ! grep -q up /sys/class/net/$interface/operstate; then
+  if [ ! -z $interface ] && ! grep -q up /sys/class/net/$interface/operstate; then
     echo "[`$date`] $interface down - will exit now!" >> $logfile
     return 1
   fi

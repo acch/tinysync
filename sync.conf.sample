@@ -43,7 +43,8 @@ ssh_port=22
 # Interface which must be connected when synchronizing the directory.
 # Specify the Ethernet interface (e.g. eth0, em1) to avoid synchronization using
 #   slow / expensive mobile connections.
-interface=em1
+# If no interface is specified, then the directory is always synchronized.
+#interface=em1
 
 # List of events which trigger automatic synchronization of the directory
 #   (autosync.sh).
