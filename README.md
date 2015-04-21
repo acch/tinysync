@@ -38,10 +38,8 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 2. Copy the sample configuration file and modify it according to your setup:
 
-   ```
-   cp sync.conf.sample sync.conf
-   vi sync.conf
-   ```
+       cp sync.conf.sample sync.conf
+       vi sync.conf
 
 3. Tinysync relies on SSH Public-Key Authentication (a.k.a. Password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
    Ensure that `rsync` is installed on both, client and server.
@@ -50,15 +48,11 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 5. In a typical usage scenario you should run `sync.sh` repeatedly, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
 
-   ```
-   */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
-   ```
+       */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
 
 6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry. Edit the desktop entry so that is contains the appropriate path to `sync.sh`:
 
-  ```
-  Exec=/path/to/sync.sh
-  ```
+       Exec=/path/to/sync.sh
 
 7. You can also enable automatic synchronization using `autosync.sh`.
    It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
@@ -71,9 +65,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
    For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`. Edit the desktop entry so that is contains the appropriate path to `autosync.sh`:
 
-   ```
-   Exec=/path/to/autosync.sh
-   ```
+       Exec=/path/to/autosync.sh
 
    ### KDE Desktop
 
