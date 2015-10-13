@@ -5,6 +5,7 @@
 #
 # Author: acch
 # Depends: openssh, rsync
+# Version: 1.0
 #
 # To activate scheduled snycing, add the following line to your crontab (crontab -e):
 # */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
