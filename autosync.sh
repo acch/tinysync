@@ -5,6 +5,7 @@
 #
 # Author: acch
 # Depends: sync.sh, inotify-tools
+# Version: 1.0
 #
 # To activate automatic snycing, run this script upon startup (gnome-session-properties)
 #
@@ -36,7 +37,7 @@ if ! load_config; then
   exit 1
 fi
 
-$basedir/sync.sh
+su $local_user sh -c $basedir/sync.sh
 
 while true
 do
@@ -44,7 +45,7 @@ do
 
 	sleep $auto_wait
 
-	$basedir/sync.sh
+	su $local_user sh -c $basedir/sync.sh
 done
 
 exit 0
