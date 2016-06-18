@@ -1,0 +1,13 @@
+[Unit]
+Description=Tinysync - Simple tool for keeping a directory synchronized between multiple computers
+After=network.target local-fs.target
+
+[Service]
+User=%i
+EnvironmentFile=/usr/local/bin/sync.conf
+ExecStart=/usr/local/bin/autosync.sh
+ExecStop=/bin/bash -c "while [ -e $local_lockfile ]; do echo Waiting for Tinysync to finish...; sleep 10; done"
+TimeoutStopSec=5min
+
+[Install]
+WantedBy=multi-user.target
