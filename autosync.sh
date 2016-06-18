@@ -1,12 +1,14 @@
 #!/bin/bash
 
 #
+# Tinysync - Simple tool for keeping a directory synchronized between multiple computers
 # autosync.sh - automatically synchronize folders between multiple clients via ssh/rsync
 #
 # Author: acch
 # Depends: sync.sh, inotify-tools
+# Version: 1.0
 #
-# To activate automatic snycing, run this script upon startup (gnome-session-properties)
+# To activate automatic syncing, run this script upon startup (e.g. via systemd service)
 #
 
 # Gather information about the environment

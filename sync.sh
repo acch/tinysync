@@ -1,14 +1,15 @@
 #!/bin/bash
 
 #
+# Tinysync - Simple tool for keeping a directory synchronized between multiple computers
 # sync.sh - synchronize folders between multiple clients via ssh/rsync
 #
 # Author: acch
 # Depends: openssh, rsync
 # Version: 1.0
 #
-# To activate scheduled snycing, add the following line to your crontab (crontab -e):
-# */10 * * * * /path/to/sync.sh &>> /var/log/sync.err
+# To activate scheduled syncing, add the following line to your crontab (crontab -e):
+# */10 * * * * /usr/local/bin/sync.sh &>> /var/log/sync.err
 #
 
 # Gather information about the environment
