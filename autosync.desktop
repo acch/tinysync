@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Autosync
-Exec=/path/to/autosync.sh
+Exec=/usr/local/bin/autosync.sh
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
