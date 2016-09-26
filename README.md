@@ -27,9 +27,10 @@ File | Description
 sync.conf.sample | Sample configuration file which needs to be copied and modified according to your setup
 *sync.conf* | The configuration file which includes information about your setup, such as server address and user name
 sync.sh | The main executable script which synchronizes the directory with the server
+systemd/sync@.service, systemd/sync@.timer | Optional systemd timer which can be used to periodically run `sync.sh`
 sync.desktop | Optional desktop entry which can be used to manually run `sync.sh`
 autosync.sh | Optional executable script which will enable automatic synchronization when the directory is modified
-autosync@.service | Optional systemd service which can be used to automatically run `autosync.sh` upon startup
+systemd/autosync@.service | Optional systemd service which can be used to automatically run `autosync.sh` upon startup
 autosync.desktop | Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
 
 
@@ -39,26 +40,39 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 2. Copy the sample configuration file and modify it according to your setup:
 
-        cp sync.conf.sample sync.conf
-        vi sync.conf
+    ```
+    cp sync.conf.sample sync.conf
+    vi sync.conf
+    ```
 
-3. Tinysync relies on SSH Public-Key Authentication (a.k.a. password-less logins) to be set up so that a client can connect to the server without being prompted for a password.
-   Ensure that `rsync` is installed on both, client and server.
+3. Tinysync relies on SSH Public-Key Authentication (a.k.a. password-less logins) to be set up so that a client can connect to the server without being prompted for a password. Ensure that `rsync` is installed on both, client and server.
 
 4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does *not* exist on the server (it will be uploaded). When adding more clients later, ensure that the directory does *not* exist on the client (it will be downloaded).
 
-5. In a typical usage scenario you will want to run `sync.sh` repeatedly, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
+5. In a typical usage scenario you will want to repeatedly synchronize the directory, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
 
-        */10 * * * * /usr/local/bin/sync.sh &>> /var/log/sync.err
+    ```
+    */10 * * * * /usr/local/bin/sync.sh &>> /var/log/sync.err
+    ```
 
-6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry. Edit the desktop entry so that is contains the appropriate path to `sync.sh`:
+   Alternatively, you can use [systemd timers](https://www.freedesktop.org/software/systemd/man/systemd.timer.html) to periodically synchronize the directory. Simply copy the `systemd/sync@.service` and `systemd/sync@.timer` files to the folder `/etc/systemd/system` and enable it for your user account:
 
-        Exec=/usr/local/bin/sync.sh
+    ```
+    sudo systemctl daemon-reload
+    sudo systemctl enable sync@user
+    sudo systemctl start sync@user
+    ```
+
+6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry. You may need to edit the desktop entry so that is contains the appropriate path to `sync.sh`:
+
+    ```
+    Exec=/usr/local/bin/sync.sh
+    ```
 
 7. You can also enable automatic synchronization using `autosync.sh`.
    It requires the installation of [inotify-tools](http://wiki.github.com/rvoicilas/inotify-tools/), as well as an inotify-compatible filesystem.
 
-   Note that automatic synchronization using `autosync.sh` is optional. Even if you enable automatic synchronization you should still configure scheduled replication (via cron) in addition to that.
+   Note that automatic synchronization using `autosync.sh` is optional. Even if you enable automatic synchronization you should still configure scheduled replication (via cron or systemd) in addition to that.
 
    To enable automatic synchronization, run `autosync.sh` upon startup. There are numerous mechanisms you can use:
 
@@ -66,20 +80,44 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
    The preferred way of running `autosync.sh` is via [systemd](https://www.freedesktop.org/wiki/Software/systemd/). In addition to enabling automatic synchronization, the systemd service will delay system shutdown so that a running synchronization is not interrupted.
 
-   For systemd-based distributions copy the `autosync@.service` file to the folder `/etc/systemd/system` and enable it for your user account:
+   For systemd-based distributions copy the `systemd/autosync@.service` file to the folder `/etc/systemd/system` and enable it for your user account:
 
-        sudo systemctl enable autosync@user
-        sudo systemctl start autosync@user
+    ```
+    sudo systemctl daemon-reload
+    sudo systemctl enable autosync@user
+    sudo systemctl start autosync@user
+    ```
 
    ### Gnome Desktop
 
-   For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`. Edit the desktop entry so that is contains the appropriate path to `autosync.sh`:
+   For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`. You may need to edit the desktop entry so that is contains the appropriate path to `autosync.sh`:
 
-        Exec=/usr/local/bin/autosync.sh
+    ```
+    Exec=/usr/local/bin/autosync.sh
+    ```
 
    ### KDE Desktop
 
    For KDE on Linux create a symbolic link to `autosync.sh` in the folder `~/.kde/Autostart/`.
+
+## Frequently asked questions
+
+**Q:** Autosync doesn't work, what can I do?
+
+**A:** First of all, ensure that you have the `inotifywatch` binary installed. On most distributions it is provided by a package *inotify-tools*.
+
+If `inotifywatch` is indeed installed but you are attempting to synchronize a large directory you may need to adapt the kernel parameter */proc/sys/fs/inotify/max_user_watches*. In such case you will encounter the following error message when trying to run `autosync.sh`:
+
+    ```
+    Failed to watch ...; upper limit on inotify watches reached!
+    Please increase the amount of inotify watches allowed per user via `/proc/sys/fs/inotify/max_user_watches'.
+    ```
+
+To increase the amount of inotify watches, simply create a new file `/etc/sysctl.d/inotify.conf`:
+
+    ```
+    fs.inotify.max_user_watches = 16384
+    ```
 
 ## Copyright and license
 
