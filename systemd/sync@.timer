@@ -1,0 +1,10 @@
+[Unit]
+Description=Tinysync - periodically synchronize the directory
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=10min
+Unit=sync@.service
+
+[Install]
+WantedBy=timers.target
