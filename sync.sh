@@ -8,8 +8,7 @@
 # Depends: openssh, rsync
 # Version: 1.1
 #
-# To activate scheduled syncing, add the following line to your crontab (crontab -e):
-# */10 * * * * /usr/local/bin/sync.sh &>> /var/log/sync.err
+# To activate scheduled syncing, run this script periodically (e.g. via systemd timer)
 #
 
 # Gather information about the environment
