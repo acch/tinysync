@@ -108,16 +108,16 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 If `inotifywatch` is indeed installed but you are attempting to synchronize a large directory you may need to adapt the kernel parameter */proc/sys/fs/inotify/max_user_watches*. In such case you will encounter the following error message when trying to run `autosync.sh`:
 
-    ```
-    Failed to watch ...; upper limit on inotify watches reached!
-    Please increase the amount of inotify watches allowed per user via `/proc/sys/fs/inotify/max_user_watches'.
-    ```
+```
+Failed to watch ...; upper limit on inotify watches reached!
+Please increase the amount of inotify watches allowed per user via `/proc/sys/fs/inotify/max_user_watches'.
+```
 
 To increase the amount of inotify watches, simply create a new file `/etc/sysctl.d/inotify.conf`:
 
-    ```
-    fs.inotify.max_user_watches = 16384
-    ```
+```
+fs.inotify.max_user_watches = 16384
+```
 
 ## Copyright and license
 
