@@ -1,5 +1,5 @@
 [Unit]
-Description=Tinysync - Simple tool for keeping a directory synchronized between multiple computers
+Description=Tinysync - automatically synchronize the directory
 After=network.target local-fs.target
 
 [Service]
