@@ -36,11 +36,17 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 ## Installation
 
-1. Download the software to a client, extract the archive (if applicable), and place the files in a directory of your choice (such as `/usr/local/bin`).
+1. Download the software to a client, extract the archive (if applicable), and place the executable files and configuration sample in a directory of your choice (such as `/usr/local/bin`).
+
+    ```
+    git clone https://github.com/acch/tinysync.git
+    cp tinysync/*.sh tinysync/*.sample /usr/local/bin
+    ```
 
 2. Copy the sample configuration file and modify it according to your setup:
 
     ```
+    cd /usr/local/bin
     cp sync.conf.sample sync.conf
     vi sync.conf
     ```
@@ -55,18 +61,20 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
     */10 * * * * /usr/local/bin/sync.sh &>> /var/log/sync.err
     ```
 
-   Alternatively, you can use [systemd timers](https://www.freedesktop.org/software/systemd/man/systemd.timer.html) to periodically synchronize the directory. Simply copy the `systemd/sync@.service` and `systemd/sync@.timer` files to the folder `/etc/systemd/system` and enable it for your user account:
+   Alternatively, you can use [systemd timers](https://www.freedesktop.org/software/systemd/man/systemd.timer.html) to periodically synchronize the directory on systemd-based distributions. Simply copy the `systemd/sync@.service` and `systemd/sync@.timer` files to the folder `/etc/systemd/system` and enable it for your user account:
 
     ```
     sudo systemctl daemon-reload
-    sudo systemctl enable sync@user
-    sudo systemctl start sync@user
+    sudo systemctl enable sync@YOUR_USER.timer
+    sudo systemctl start sync@YOUR_USER.timer
     ```
 
 6. In addition to scheduled replication, you can manually run `sync.sh` to synchronize the directory with the server. Copy the `sync.desktop` file to the folder `~/.local/share/applications/` to add an appropriate menu entry. You may need to edit the desktop entry so that is contains the appropriate path to `sync.sh`:
 
     ```
+    ...
     Exec=/usr/local/bin/sync.sh
+    ...
     ```
 
 7. You can also enable automatic synchronization using `autosync.sh`.
@@ -84,8 +92,8 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
     ```
     sudo systemctl daemon-reload
-    sudo systemctl enable autosync@user
-    sudo systemctl start autosync@user
+    sudo systemctl enable autosync@YOUR_USER
+    sudo systemctl start autosync@YOUR_USER
     ```
 
    ### Gnome Desktop
@@ -93,7 +101,9 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
    For Gnome on Linux copy the `autosync.desktop` file to the folder `~/.config/autostart/`. You may need to edit the desktop entry so that is contains the appropriate path to `autosync.sh`:
 
     ```
+    ...
     Exec=/usr/local/bin/autosync.sh
+    ...
     ```
 
    ### KDE Desktop
@@ -102,7 +112,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 ## Frequently asked questions
 
-**Q:** Autosync doesn't work, what can I do?
+**Q:** Automatic synchronization doesn't work, what can I do?
 
 **A:** First of all, ensure that you have the `inotifywatch` binary installed. On most distributions it is provided by a package *inotify-tools*.
 
