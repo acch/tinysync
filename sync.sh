@@ -16,11 +16,26 @@ basedir=$(dirname "$0")
 local_user=$(whoami)
 date="/usr/bin/date -R"
 
+
+# Sanity checks
+if [ ! -x /usr/bin/ssh ]
+then
+  echo "[`$date`] 'openssh' not found - please install it!"
+  exit 1
+fi
+
+if [ ! -x /usr/bin/rsync ]
+then
+  echo "[`$date`] 'rsync' not found - please install it!"
+  exit 1
+fi
+
+
 load_config () {
   # Load configuration from file
   if [ ! -f "$basedir/sync.conf" ]; then
     echo "[`$date`] Config file not found: $basedir/sync.conf"
-    echo "Please copy the sample config file and edit it accordingly."
+    echo "Please copy the sample config file and edit it accordingly!"
     return 1
   fi
 
@@ -48,6 +63,7 @@ load_config () {
     -p $ssh_port"
 }
 
+
 acquire_local_lock () {
   # Check for existence of local lock
   if [ -f "$local_lockfile" ]; then
@@ -59,6 +75,7 @@ acquire_local_lock () {
   # Acquire local lock
   touch $local_lockfile
 }
+
 
 acquire_server_lock () {
   # Check for existence of server lock
@@ -72,6 +89,7 @@ acquire_server_lock () {
   $rsh touch $remote_lockfile
 }
 
+
 release_local_lock () {
   # Release local lock
   if [ -f "$local_lockfile" ]; then
@@ -79,12 +97,14 @@ release_local_lock () {
   fi
 }
 
+
 release_server_lock () {
   # Release server lock
   if $rsh [ -f "$remote_lockfile" ]; then
     $rsh rm $remote_lockfile
   fi
 }
+
 
 check_network () {
   # Check for $interface
@@ -106,6 +126,7 @@ check_network () {
   fi
 }
 
+
 check_local_dir () {
   # Check for existence of local directory
   if [ ! -d "/home/$local_user/$directory" ]; then
@@ -114,6 +135,7 @@ check_local_dir () {
     return 1
   fi
 }
+
 
 check_server_dir () {
   # Check for existence of server directory
@@ -124,6 +146,7 @@ check_server_dir () {
   fi
 }
 
+
 sync_down () {
   # Check what syncing down would do
   changes=$($rsync_test -e "$rsync_ssh_opts" $host:/home/$remote_user/$directory /home/$local_user/ 2>> $logfile | wc -l)
@@ -131,7 +154,6 @@ sync_down () {
   if [ "$changes" -gt 4 ]; then
     # Log what we're about to do
     echo "[`$date`] Downloading $(( $changes - 4 )) changes." >> $logfile
-    #notify-send -i down sync.sh "Downloading $(( $changes - 4 )) changes..."
 
     # Download changes
     $rsync -e "$rsync_ssh_opts" $host:/home/$remote_user/$directory /home/$local_user/ &>> $logfile
@@ -143,6 +165,7 @@ sync_down () {
   fi
 }
 
+
 sync_up () {
   # Check what syncing up would do
   changes=$($rsync_test -e "$rsync_ssh_opts" /home/$local_user/$directory $host:/home/$remote_user/ 2>> $logfile | wc -l)
@@ -150,7 +173,6 @@ sync_up () {
   if [ "$changes" -gt 4 ]; then
     # Log what we're about to do
     echo "[`$date`] Uploading $(( $changes - 4 )) changes." >> $logfile
-    #notify-send -i up sync.sh "Uploading $(( $changes - 4 )) changes..."
 
     # Upload changes
     $rsync -e "$rsync_ssh_opts" /home/$local_user/$directory $host:/home/$remote_user/ &>> $logfile
@@ -162,6 +184,7 @@ sync_up () {
   fi
 }
 
+
 init_log () {
   # Check for existence of log file
   if [ ! -f "$logfile" ]; then
@@ -169,6 +192,7 @@ init_log () {
     echo "[`$date`] Starting up!" > $logfile
   fi
 }
+
 
 prune_log () {
   # Check size of log file
@@ -179,7 +203,6 @@ prune_log () {
     rm /tmp/sync.log.tmp
   fi
 }
-
 
 
 ###############################################################################

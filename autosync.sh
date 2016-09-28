@@ -16,17 +16,31 @@ basedir=$(dirname "$0")
 local_user=$(whoami)
 date="/usr/bin/date -R"
 
+
+# Sanity checks
+if ! which inotifywait &> /dev/null; then
+  echo "[`$date`] 'inotify-tools' not found - please install it!"
+  exit 1
+fi
+
+if [ ! -x "$basedir/sync.sh" ]; then
+then
+  echo "[`$date`] Script not found: $basedir/sync.sh"
+  echo "Please copy sync.sh and autosync.sh into the same directory!"
+  exit 1
+fi
+
+
 load_config () {
   # Load configuration from file
   if [ ! -f "$basedir/sync.conf" ]; then
     echo "[`$date`] Config file not found: $basedir/sync.conf"
-    echo "Please copy the sample config file and edit it accordingly"
+    echo "Please copy the sample config file and edit it accordingly!"
     return 1
   fi
 
   source $basedir/sync.conf
 }
-
 
 
 ###############################################################################
@@ -38,15 +52,19 @@ if ! load_config; then
   exit 1
 fi
 
+# Initial sync
 $basedir/sync.sh
 
 while true
 do
-	inotifywait -qqr $events /home/$local_user/$directory
+  # Wait for events
+  inotifywait -qqr $events /home/$local_user/$directory
 
-	sleep $auto_wait
+  # Wait for a moment
+  sleep $auto_wait
 
-	$basedir/sync.sh
+  # Sync changes
+  $basedir/sync.sh
 done
 
 exit 0
