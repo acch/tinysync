@@ -114,9 +114,9 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 **Q:** Automatic synchronization doesn't work, what can I do?
 
-**A:** First of all, ensure that you have the `inotifywatch` binary installed. On most distributions it is provided by a package *inotify-tools*.
+**A:** First of all, ensure that you have the `inotifywait` binary installed. On most distributions it is provided by a package *inotify-tools*.
 
-If `inotifywatch` is indeed installed but you are attempting to synchronize a large directory you may need to adapt the kernel parameter */proc/sys/fs/inotify/max_user_watches*. In such case you will encounter the following error message when trying to run `autosync.sh`:
+If `inotifywait` is indeed installed but you are attempting to synchronize a large directory you may need to adapt the kernel parameter */proc/sys/fs/inotify/max_user_watches*. In such case you will encounter the following error message when trying to run `autosync.sh`:
 
 ```
 Failed to watch ...; upper limit on inotify watches reached!
