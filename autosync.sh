@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: sync.sh, inotify-tools
-# Version: 1.1
+# Version: 1.2
 #
 # To activate automatic syncing, run this script upon startup (e.g. via systemd service)
 #
@@ -24,7 +24,6 @@ if ! which inotifywait &> /dev/null; then
 fi
 
 if [ ! -x "$basedir/sync.sh" ]; then
-then
   echo "[`$date`] Script not found: $basedir/sync.sh"
   echo "Please copy sync.sh and autosync.sh into the same directory!"
   exit 1

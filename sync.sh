@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: openssh, rsync
-# Version: 1.1
+# Version: 1.2
 #
 # To activate scheduled syncing, run this script periodically (e.g. via systemd timer)
 #
@@ -18,14 +18,12 @@ date="/usr/bin/date -R"
 
 
 # Sanity checks
-if [ ! -x /usr/bin/ssh ]
-then
+if [ ! -x /usr/bin/ssh ]; then
   echo "[`$date`] 'openssh' not found - please install it!"
   exit 1
 fi
 
-if [ ! -x /usr/bin/rsync ]
-then
+if [ ! -x /usr/bin/rsync ]; then
   echo "[`$date`] 'rsync' not found - please install it!"
   exit 1
 fi
