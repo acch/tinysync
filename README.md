@@ -62,10 +62,10 @@ The preferred method for installing Tinysync is by using the `install.sh` script
 4. Once manual synchronization of the directory works well you can enable automatic synchronization for your user account with the following commands :
 
     ```
-    sudo systemctl enable sync@YOUR_USER.timer"
-    sudo systemctl start sync@YOUR_USER.timer"
-    sudo systemctl enable autosync@YOUR_USER"
-    sudo systemctl start autosync@YOUR_USER"
+    sudo systemctl enable sync@YOUR_USER.timer
+    sudo systemctl start sync@YOUR_USER.timer
+    sudo systemctl enable autosync@YOUR_USER
+    sudo systemctl start autosync@YOUR_USER
     ```
 
 ### Manual Installation
