@@ -36,11 +36,45 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 ## Installation
 
+### Automatic Installation
+
+The preferred method for installing Tinysync is by using the `install.sh` script. Alternatively, you can follow the [Manual Installation](#manual installation) procedure below.
+
+1. There are several options for downloading the software:
+
+    - Download the latest [release](https://github.com/acch/tinysync/releases/latest)
+    - Clone the repo: `git clone https://github.com/acch/tinysync.git`
+
+   Download the software to a client, extract the archive (if applicable), and run the automatic installer script:
+
+    ```
+    tinysync/install.sh
+    ```
+
+2. Modify the sample configuration according to your setup:
+
+    ```
+    vi /usr/local/bin/sync.conf
+    ```
+
+3. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does **not** exist on the server (it will be uploaded). When adding more clients later, ensure that the directory does **not** exist on the client (it will be downloaded).
+
+4. Once manual synchronization of the directory works well you can enable automatic synchronization for your user account with the following commands :
+
+    ```
+    sudo systemctl enable sync@YOUR_USER.timer"
+    sudo systemctl start sync@YOUR_USER.timer"
+    sudo systemctl enable autosync@YOUR_USER"
+    sudo systemctl start autosync@YOUR_USER"
+    ```
+
+### Manual Installation
+
 1. Download the software to a client, extract the archive (if applicable), and place the executable files and configuration sample in a directory of your choice (such as `/usr/local/bin`).
 
     ```
     git clone https://github.com/acch/tinysync.git
-    cp tinysync/*.sh tinysync/*.sample /usr/local/bin
+    cp tinysync/sync.sh tinysync/autosync.sh tinysync/*.sample /usr/local/bin/
     ```
 
 2. Copy the sample configuration file and modify it according to your setup:
@@ -53,7 +87,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 3. Tinysync relies on SSH Public-Key Authentication (a.k.a. password-less logins) to be set up so that a client can connect to the server without being prompted for a password. Ensure that `rsync` is installed on both, client and server.
 
-4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does *not* exist on the server (it will be uploaded). When adding more clients later, ensure that the directory does *not* exist on the client (it will be downloaded).
+4. Manually run `sync.sh` from a terminal to verify that your configuration parameters are correct. When connecting to a server for the first time, ensure that the directory does **not** exist on the server (it will be uploaded). When adding more clients later, ensure that the directory does **not** exist on the client (it will be downloaded).
 
 5. In a typical usage scenario you will want to repeatedly synchronize the directory, e.g. via cron. Add something like the following to your crontab (`crontab -e`) to enable scheduled synchronization:
 
