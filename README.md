@@ -38,7 +38,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 ### Automatic Installation
 
-The preferred method for installing Tinysync is by using the `install.sh` script. Alternatively, you can follow the [Manual Installation](#manual installation) procedure below.
+The preferred method for installing Tinysync is by using the `install.sh` script. Alternatively, you can follow the [Manual Installation](#manual-installation) procedure below.
 
 1. There are several options for downloading the software:
 
