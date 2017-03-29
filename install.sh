@@ -5,6 +5,12 @@
 # install.sh - automatically install files to their designated locations
 #
 
+# Ignore linter errors
+# shellcheck disable=SC2086
+
+# Treat unset variables as an error
+set -u
+
 # Gather information about the environment
 basedir=$(dirname "$0")
 local_user=$(whoami)

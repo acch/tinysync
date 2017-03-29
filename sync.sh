@@ -11,6 +11,13 @@
 # To activate scheduled syncing, run this script periodically (e.g. via systemd timer)
 #
 
+# Ignore linter errors
+# shellcheck disable=SC2086
+# shellcheck disable=SC2154
+
+# Treat unset variables as errors
+set -u
+
 # Gather information about the environment
 basedir=$(dirname "$0")
 local_user=$(whoami)
@@ -19,12 +26,12 @@ date="/usr/bin/date -R"
 
 # Sanity checks
 if [ ! -x /usr/bin/ssh ]; then
-  echo "[`$date`] 'openssh' not found - please install it!"
+  echo "[$($date)] 'openssh' not found - please install it!"
   exit 1
 fi
 
 if [ ! -x /usr/bin/rsync ]; then
-  echo "[`$date`] 'rsync' not found - please install it!"
+  echo "[$($date)] 'rsync' not found - please install it!"
   exit 1
 fi
 
@@ -32,11 +39,12 @@ fi
 load_config () {
   # Load configuration from file
   if [ ! -f "$basedir/sync.conf" ]; then
-    echo "[`$date`] Config file not found: $basedir/sync.conf"
+    echo "[$($date)] Config file not found: $basedir/sync.conf"
     echo "Please copy the sample config file and edit it accordingly!"
     return 1
   fi
 
+  # shellcheck source=/dev/null
   source $basedir/sync.conf
 
   # Compile SSH command
@@ -66,7 +74,7 @@ acquire_local_lock () {
   # Check for existence of local lock
   if [ -f "$local_lockfile" ]; then
     # Lock exists, another instance seems to be running
-    echo "[`$date`] Already running - will exit now!" >> $logfile
+    echo "[$($date)] Already running - will exit now!" >> $logfile
     return 1
   fi
 
@@ -79,7 +87,7 @@ acquire_server_lock () {
   # Check for existence of server lock
   if $rsh [ -f "$remote_lockfile" ]; then
     # Lock exists, another instance seems to be running
-    echo "[`$date`] Server locked - will exit now!" >> $logfile
+    echo "[$($date)] Server locked - will exit now!" >> $logfile
     return 1
   fi
 
@@ -106,20 +114,20 @@ release_server_lock () {
 
 check_network () {
   # Check for $interface
-  if [ ! -z $interface ] && ! grep -q up /sys/class/net/$interface/operstate; then
-    echo "[`$date`] $interface down - will exit now!" >> $logfile
+  if [ ! -z "$interface" ] && ! grep -q up /sys/class/net/$interface/operstate; then
+    echo "[$($date)] $interface down - will exit now!" >> $logfile
     return 1
   fi
 
   # Check for internet connection
   if ! ping -c 1 www.google.com &> /dev/null; then
-    echo "[`$date`] No network - will exit now!" >> $logfile
+    echo "[$($date)] No network - will exit now!" >> $logfile
     return 1
   fi
 
   # Check for ssh connectivity
   if ! $rsh ls &> /dev/null; then
-    echo "[`$date`] No SSH connection - will exit now!" >> $logfile
+    echo "[$($date)] No SSH connection - will exit now!" >> $logfile
     return 1
   fi
 }
@@ -151,13 +159,11 @@ sync_down () {
 
   if [ "$changes" -gt 4 ]; then
     # Log what we're about to do
-    echo "[`$date`] Downloading $(( $changes - 4 )) changes." >> $logfile
+    echo "[$($date)] Downloading $(( changes - 4 )) changes." >> $logfile
 
     # Download changes
-    $rsync -e "$rsync_ssh_opts" $host:/home/$remote_user/$directory /home/$local_user/ &>> $logfile
-
-    # Check for errors
-    if [ $? -ne 0 ]; then
+    if ! $rsync -e "$rsync_ssh_opts" $host:/home/$remote_user/$directory /home/$local_user/ &>> $logfile; then
+      # Check for errors
       return 1
     fi
   fi
@@ -170,13 +176,11 @@ sync_up () {
 
   if [ "$changes" -gt 4 ]; then
     # Log what we're about to do
-    echo "[`$date`] Uploading $(( $changes - 4 )) changes." >> $logfile
+    echo "[$($date)] Uploading $(( changes - 4 )) changes." >> $logfile
 
     # Upload changes
-    $rsync -e "$rsync_ssh_opts" /home/$local_user/$directory $host:/home/$remote_user/ &>> $logfile
-
-    # Check for errors
-    if [ $? -ne 0 ]; then
+    if ! $rsync -e "$rsync_ssh_opts" /home/$local_user/$directory $host:/home/$remote_user/ &>> $logfile; then
+      # Check for errors
       return 1
     fi
   fi
@@ -187,14 +191,14 @@ init_log () {
   # Check for existence of log file
   if [ ! -f "$logfile" ]; then
     # Initialize new log file
-    echo "[`$date`] Starting up!" > $logfile
+    echo "[$($date)] Starting up!" > $logfile
   fi
 }
 
 
 prune_log () {
   # Check size of log file
-  if [ $(wc -l "$logfile" | cut -d ' ' -f 1) -gt 150 ]; then
+  if [ "$(wc -l $logfile | cut -d ' ' -f 1)" -gt 150 ]; then
     # Make sure log file doesn't grow too big
     tail -n 100 $logfile > /tmp/sync.log.tmp
     cat /tmp/sync.log.tmp > $logfile
@@ -226,7 +230,7 @@ if ! acquire_local_lock; then
 fi
 
 # Sleep up to $sched_wait seconds (force option overrides)
-if [ "$force" -eq 0 ]; then sleep $(( $RANDOM % $sched_wait )); fi
+if [ "$force" -eq 0 ]; then sleep $(( RANDOM % sched_wait )); fi
 
 # Check for connectivity (force option overrides)
 if [ "$force" -eq 1 ] || check_network; then
