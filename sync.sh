@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: openssh, rsync
-# Version: 1.2
+# Version: 1.3
 #
 # To activate scheduled syncing, run this script periodically (e.g. via systemd timer)
 #
@@ -54,6 +54,9 @@ load_config () {
     -l $remote_user \
     -i $ssh_key \
     -p $ssh_port \
+    -o ControlMaster=auto
+    -o ControlPath=~/.ssh/sync-%C
+    -o ControlPersist=$(( auto_wait + sched_wait + 5 ))
     $host"
 
   # Compile RSYNC command
@@ -66,7 +69,10 @@ load_config () {
     -o PubkeyAuthentication=yes \
     -l $remote_user \
     -i $ssh_key \
-    -p $ssh_port"
+    -p $ssh_port \
+    -o ControlMaster=auto
+    -o ControlPath=~/.ssh/sync-%C
+    -o ControlPersist=$(( auto_wait + sched_wait + 5 ))"
 }
 
 
