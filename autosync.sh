@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: sync.sh, inotify-tools
-# Version: 1.2
+# Version: 1.3
 #
 # To activate automatic syncing, run this script upon startup (e.g. via systemd service)
 #
