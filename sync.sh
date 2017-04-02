@@ -20,8 +20,9 @@ set -u
 
 # Gather information about the environment
 basedir=$(dirname "$0")
-local_user=$(whoami)
 date="/usr/bin/date -R"
+local_user=$(whoami)
+interface=""
 
 
 # Sanity checks
