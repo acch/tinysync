@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: sync.sh, inotify-tools
-# Version: 1.3
+# Version: 1.3.1
 #
 # To activate automatic syncing, run this script upon startup (e.g. via systemd service)
 #
@@ -55,15 +55,12 @@ load_config () {
 ###############################################################################
 
 # Load configuration
-if ! load_config; then
-  exit 1
-fi
+load_config || exit 1
 
 # Initial sync
 $basedir/sync.sh
 
-while true
-do
+while true; do
   # Wait for events
   inotifywait -qqr $events /home/$local_user/$directory
 

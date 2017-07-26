@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: openssh, rsync
-# Version: 1.3
+# Version: 1.3.1
 #
 # To activate scheduled syncing, run this script periodically (e.g. via systemd timer)
 #
@@ -74,6 +74,8 @@ load_config () {
     -o ControlMaster=auto
     -o ControlPath=~/.ssh/sync-%C
     -o ControlPersist=$(( auto_wait + sched_wait + 5 ))"
+
+  return 0
 }
 
 
@@ -87,6 +89,8 @@ acquire_local_lock () {
 
   # Acquire local lock
   touch $local_lockfile
+
+  return 0
 }
 
 
@@ -100,22 +104,20 @@ acquire_server_lock () {
 
   # Acquire server lock
   $rsh touch $remote_lockfile
-}
 
-
-release_local_lock () {
-  # Release local lock
-  if [ -f "$local_lockfile" ]; then
-    rm $local_lockfile
-  fi
+  return 0
 }
 
 
 release_server_lock () {
   # Release server lock
-  if $rsh [ -f "$remote_lockfile" ]; then
-    $rsh rm $remote_lockfile
-  fi
+  $rsh [ -f "$remote_lockfile" ] && $rsh rm $remote_lockfile
+}
+
+
+release_local_lock () {
+  # Release local lock
+  [ -f "$local_lockfile" ] && rm $local_lockfile
 }
 
 
@@ -137,6 +139,8 @@ check_network () {
     echo "[$($date)] No SSH connection - will exit now!" >> $logfile
     return 1
   fi
+
+  return 0
 }
 
 
@@ -147,6 +151,8 @@ check_local_dir () {
     mkdir /home/$local_user/$directory
     return 1
   fi
+
+  return 0
 }
 
 
@@ -157,6 +163,8 @@ check_server_dir () {
     $rsh mkdir /home/$remote_user/$directory
     return 1
   fi
+
+  return 0
 }
 
 
@@ -169,11 +177,10 @@ sync_down () {
     echo "[$($date)] Downloading $(( changes - 4 )) changes." >> $logfile
 
     # Download changes
-    if ! $rsync -e "$rsync_ssh_opts" $host:/home/$remote_user/$directory /home/$local_user/ &>> $logfile; then
-      # Check for errors
-      return 1
-    fi
+    $rsync -e "$rsync_ssh_opts" $host:/home/$remote_user/$directory /home/$local_user/ &>> $logfile || return 1
   fi
+
+  return 0
 }
 
 
@@ -186,20 +193,16 @@ sync_up () {
     echo "[$($date)] Uploading $(( changes - 4 )) changes." >> $logfile
 
     # Upload changes
-    if ! $rsync -e "$rsync_ssh_opts" /home/$local_user/$directory $host:/home/$remote_user/ &>> $logfile; then
-      # Check for errors
-      return 1
-    fi
+    $rsync -e "$rsync_ssh_opts" /home/$local_user/$directory $host:/home/$remote_user/ &>> $logfile || return 1
   fi
+
+  return 0
 }
 
 
 init_log () {
-  # Check for existence of log file
-  if [ ! -f "$logfile" ]; then
-    # Initialize new log file
-    echo "[$($date)] Starting up!" > $logfile
-  fi
+  # Check for existence of log file and initialize if necessary
+  [ -f "$logfile" ] || echo "[$($date)] Starting up!" > $logfile
 }
 
 
@@ -219,61 +222,62 @@ prune_log () {
 ###############################################################################
 
 # Load configuration
-if ! load_config; then
-  exit 1
-fi
+load_config || exit 1
 
 # Check for force option
-if [ $# -gt 0 ] && [ "$1" == "--force" ]; then force=1
-else force=0
+if [ $# -gt 0 ] && [ "$1" == "--force" ]; then
+  force=1
+else
+  force=0
 fi
 
 # Initialize
 init_log
 
 # Check for another instance running
-if ! acquire_local_lock; then
-  exit 1
-fi
+acquire_local_lock || exit 1
 
 # Sleep up to $sched_wait seconds (force option overrides)
-if [ "$force" -eq 0 ]; then sleep $(( RANDOM % sched_wait )); fi
+[ "$force" -eq 1 ] || sleep $(( RANDOM % sched_wait ))
 
 # Check for connectivity (force option overrides)
 if [ "$force" -eq 1 ] || check_network; then
+
   # Check for another instance running on server
   if acquire_server_lock; then
+
     # Check for existence of local copy
     if ! check_local_dir; then
+
       # Download server copy
       sync_down
+
     # Check for existence of server copy
     elif ! check_server_dir; then
+
       # Find latest mtime in local copy
       local_mtime=$(find /home/$local_user/$directory -printf "%Ts\n" | sort -g | tail -n 1)
 
-      # Upload local copy
-      if sync_up; then
-        # Update server copy's timestamp on success
-        $rsh "echo $local_mtime > /home/$remote_user/sync.tim"
-      fi
+      # Upload local copy, then update server copy's timestamp on success
+      sync_up && $rsh "echo $local_mtime > /home/$remote_user/sync.tim"
+
+    # Local copy and server copy exist
     else
+
       # Find latest mtime in local and server copy
       local_mtime=$(find /home/$local_user/$directory -printf "%Ts\n" | sort -g | tail -n 1)
       server_mtime=$($rsh "cat /home/$remote_user/sync.tim")
 
       # Compare mtimes
       if [ "$local_mtime" -lt "$server_mtime" ]; then
-        # Server copy is newer, download it
+        # Server copy is newer - download it
         sync_down
       elif [ "$local_mtime" -gt "$server_mtime" ]; then
-        # Local copy is newer, upload it
-        if sync_up; then
-          # Update server copy's timestamp on success
-          $rsh "echo $local_mtime > /home/$remote_user/sync.tim"
-        fi
+        # Local copy is newer - upload it, then update server copy's timestamp on success
+        sync_up && $rsh "echo $local_mtime > /home/$remote_user/sync.tim"
       fi
       # If copies are already in sync, do nothing
+
     fi
 
     # Clean up server
