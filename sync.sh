@@ -237,6 +237,9 @@ init_log
 # Check for another instance running
 acquire_local_lock || exit 1
 
+# Ensure local lock is released upon exit
+trap "release_local_lock; exit" INT TERM EXIT
+
 # Sleep up to $sched_wait seconds (force option overrides)
 [ "$force" -eq 1 ] || sleep $(( RANDOM % sched_wait ))
 
@@ -245,6 +248,9 @@ if [ "$force" -eq 1 ] || check_network; then
 
   # Check for another instance running on server
   if acquire_server_lock; then
+
+    # Ensure server lock is released upon exit
+    trap "release_server_lock; release_local_lock; exit" INT TERM EXIT
 
     # Check for existence of local copy
     if ! check_local_dir; then
@@ -288,5 +294,8 @@ fi
 # Clean up
 prune_log
 release_local_lock
+
+# Remove traps
+trap - INT TERM EXIT
 
 exit 0
