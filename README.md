@@ -1,7 +1,7 @@
 # Tinysync
 
 Tinysync is a simple tool for keeping a directory synchronized between multiple computers.
-Its primary design goal is to be small, lightweight, and not require additional software to accomplish this task.
+Its primary design goal is to be small, lightweight, and not to require additional software to accomplish this task.
 
 Tinysync is based on [Bash](https://www.gnu.org/software/bash/) and [rsync](https://rsync.samba.org/) &mdash; it is known to run on Linux and FreeBSD, but should work on any Unix-compatible operating system.
 The tool requires a central server to synchronize data with, but in fact does not require installation of any software on this server. The required packages are typically installed as part of the base operating system.
