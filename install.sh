@@ -28,6 +28,7 @@ echo "Installing Tinysync (will prompt for your password)..."
 [ -f /usr/local/bin/autosync.sh ] || sudo cp $basedir/autosync.sh /usr/local/bin/
 [ -x /usr/local/bin/autosync.sh ] || sudo chmod a+x /usr/local/bin/autosync.sh
 [ -f /usr/local/bin/sync.conf ] || sudo cp $basedir/sync.conf.sample /usr/local/bin/sync.conf
+[ -f /var/log/sync.log ] || sudo touch /var/log/sync.log && sudo chown $local_user /var/log/sync.log
 
 if [ -d "$HOME/.local/share/applications/" ]; then
   [ -f "$HOME/.local/share/applications/sync.desktop" ] || cp $basedir/sync.desktop $HOME/.local/share/applications/
