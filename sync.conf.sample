@@ -2,7 +2,7 @@
 
 # Directory on the client which should be synchronized with the server.
 # A relative path inside the local user's home directory.
-directory="YOUR_DIRECTORY"
+directory="data"
 
 # Local user account on the client used to synchronize the directory.
 # The directory must be inside the local user's home directory.
@@ -12,7 +12,7 @@ directory="YOUR_DIRECTORY"
 # Remote user account on the server used to synchronize the directory.
 # The local user on the client must be able to login as the remote user on the
 #   server.
-remote_user="tinysync"
+remote_user="root"
 
 # SSH key for the local user on the client used to login as the remote user on
 #   the server.

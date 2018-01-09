@@ -33,12 +33,51 @@ autosync.sh | Optional executable script which will enable automatic synchroniza
 systemd/autosync@.service | Optional systemd service which can be used to automatically run `autosync.sh` upon startup
 autosync.desktop | Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
 
+## Server
 
-## Installation
+### Docker
+
+The preferred method for setting up the Tinysync server is by running a container from the pre-built Docker image. Note that you will need to supply your public SSH key when running the container.
+
+Using plain Docker:
+
+```
+docker run --rm \
+  -v sshvol:/etc/ssh \
+  -v datavol:/root/data \
+  --env AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \ acch/tinysync
+```
+
+Using Docker-Compose:
+
+```
+TBD
+```
+
+### Manual Server Installation
+
+To manually install the Tinysync server component ensure that you have `openssh` and `rsync` installed on that system.
+
+Tinysync relies on SSH Public-Key Authentication (a.k.a. password-less logins) to be set up so that a client can connect to the server without being prompted for a password. Ensure that SSH Public-Key Authentication is enabled on your server:
+
+```
+/etc/ssh/sshd_config:
+  ...
+  PubkeyAuthentication yes
+  ...
+```
+
+In addition, you will need to add your public SSH key to the file `~/.ssh/authorized_keys` on your server. The easiest way to achieve this is by running the following command from one of your clients:
+
+```
+ssh-copy-id -i ~/.ssh/id_rsa_tinysync.pub REMOTE_USER@YOUR_SERVER
+```
+
+## Clients
 
 ### Automatic Installation
 
-The preferred method for installing Tinysync is by using the `install.sh` script. Alternatively, you can follow the [Manual Installation](#manual-installation) procedure below.
+The preferred method for installing Tinysync on clients is by using the `install.sh` script. Alternatively, you can follow the [Manual Installation](#manual-installation) procedure below.
 
 1. There are several options for downloading the software:
 
