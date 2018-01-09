@@ -41,20 +41,41 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 The preferred method for setting up the Tinysync server is by running a container from the pre-built [Docker](https://www.docker.com) image [acch/tinysync](https://hub.docker.com/r/acch/tinysync). Note that you will need to supply your public SSH key when running the container.
 
-Using plain Docker:
+Using plain [Docker](https://docs.docker.com/engine/reference/run):
 
 ```
 docker run --rm \
-  -v sshvol:/etc/ssh \
-  -v datavol:/root/data \
+  --name tinysync \
+  -p 2222:22 \
+  -v tinysync_ssh:/etc/ssh \
+  -v tinysync_data:/data \
   --env AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \
   acch/tinysync
 ```
 
-Using Docker-Compose:
+Using [Docker-Compose](https://docs.docker.com/compose/compose-file):
 
 ```
-TBD
+version: '2'
+
+services:
+  tinysync:
+    image: acch/tinysync
+    container_name: tinysync
+    ports:
+      - 2222:22
+    volumes:
+      - ssh:/etc/ssh
+      - data:/data
+    environment:
+      - AUTHORIZED_KEYS=...
+    restart: always
+
+volumes:
+  ssh:
+    driver: local
+  data:
+    driver: local
 ```
 
 ### Manual server installation
