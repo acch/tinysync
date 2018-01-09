@@ -12,8 +12,12 @@ IFS=$'\n'
 for key in $(echo $AUTHORIZED_KEYS | tr "," "\n")
 do
   trimmed_key=$(echo $key | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-  echo "Adding authorized key \"${trimmed_key}\"..."
-  echo $trimmed_key >> /home/tinysync/.ssh/authorized_keys
+
+  if ! grep "$trimmed_key" /home/tinysync/.ssh/authorized_keys &> /dev/null
+  then
+    echo "Adding authorized key \"${trimmed_key}\"..."
+    echo $trimmed_key >> /home/tinysync/.ssh/authorized_keys
+  fi
 done
 
 # Generate host keys if they do not exist
