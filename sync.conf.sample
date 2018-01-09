@@ -12,7 +12,7 @@ directory="data"
 # Remote user account on the server used to synchronize the directory.
 # The local user on the client must be able to login as the remote user on the
 #   server.
-remote_user="root"
+remote_user="tinysync"
 
 # SSH key for the local user on the client used to login as the remote user on
 #   the server.

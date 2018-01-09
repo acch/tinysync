@@ -6,11 +6,19 @@ RUN apk add --no-cache \
   openssh \
   rsync
 
+# Create named user
+RUN adduser -D -s /bin/ash tinysync \
+&& passwd -u tinysync \
+&& mkdir /data \
+&& chown tinysync:tinysync /data \
+&& ln -s /data /home/tinysync/data
+
 # Prepare SSH config
-RUN mkdir /root/.ssh \
-&& chmod 700 /root/.ssh \
-&& touch /root/.ssh/authorized_keys \
-&& chmod 600 /root/.ssh/authorized_keys \
+RUN mkdir /home/tinysync/.ssh \
+&& chmod 700 /home/tinysync/.ssh \
+&& touch /home/tinysync/.ssh/authorized_keys \
+&& chmod 600 /home/tinysync/.ssh/authorized_keys \
+&& chown -R tinysync:tinysync /home/tinysync/.ssh \
 && sed -i 's/^#PasswordAuthentication.*$/PasswordAuthentication no/' /etc/ssh/sshd_config \
 && sed -i 's/^#PubkeyAuthentication.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
@@ -21,7 +29,7 @@ ENV AUTHORIZED_KEYS none
 COPY entrypoint.sh /
 
 # Expose volumes
-VOLUME ["/etc/ssh", "/root/data"]
+VOLUME ["/etc/ssh", "/data"]
 
 # Expose ports
 EXPOSE 22

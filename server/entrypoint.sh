@@ -13,7 +13,7 @@ for key in $(echo $AUTHORIZED_KEYS | tr "," "\n")
 do
   trimmed_key=$(echo $key | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
   echo "Adding authorized key \"${trimmed_key}\"..."
-  echo $trimmed_key >> /root/.ssh/authorized_keys
+  echo $trimmed_key >> /home/tinysync/.ssh/authorized_keys
 done
 
 # Generate host keys if they do not exist
