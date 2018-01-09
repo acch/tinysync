@@ -20,7 +20,8 @@ RUN mkdir /home/tinysync/.ssh \
 && chmod 600 /home/tinysync/.ssh/authorized_keys \
 && chown -R tinysync:tinysync /home/tinysync/.ssh \
 && sed -i 's/^#PasswordAuthentication.*$/PasswordAuthentication no/' /etc/ssh/sshd_config \
-&& sed -i 's/^#PubkeyAuthentication.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+&& sed -i 's/^#PubkeyAuthentication.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config \
+&& sed -i 's/^#PermitRootLogin.*$/PermitRootLogin no/' /etc/ssh/sshd_config
 
 # Default environment
 ENV AUTHORIZED_KEYS none
