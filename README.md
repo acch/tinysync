@@ -33,11 +33,13 @@ autosync.sh | Optional executable script which will enable automatic synchroniza
 systemd/autosync@.service | Optional systemd service which can be used to automatically run `autosync.sh` upon startup
 autosync.desktop | Optional desktop entry which can be used to automatically run `autosync.sh` upon startup
 
+---
+
 ## Server
 
-### Docker
+### Docker deployment
 
-The preferred method for setting up the Tinysync server is by running a container from the pre-built Docker image. Note that you will need to supply your public SSH key when running the container.
+The preferred method for setting up the Tinysync server is by running a container from the pre-built [Docker](https://www.docker.com) image [acch/tinysync](https://hub.docker.com/r/acch/tinysync). Note that you will need to supply your public SSH key when running the container.
 
 Using plain Docker:
 
@@ -45,7 +47,8 @@ Using plain Docker:
 docker run --rm \
   -v sshvol:/etc/ssh \
   -v datavol:/root/data \
-  --env AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \ acch/tinysync
+  --env AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \
+  acch/tinysync
 ```
 
 Using Docker-Compose:
@@ -54,7 +57,7 @@ Using Docker-Compose:
 TBD
 ```
 
-### Manual Server Installation
+### Manual server installation
 
 To manually install the Tinysync server component ensure that you have `openssh` and `rsync` installed on that system.
 
@@ -75,7 +78,7 @@ ssh-copy-id -i ~/.ssh/id_rsa_tinysync.pub REMOTE_USER@YOUR_SERVER
 
 ## Clients
 
-### Automatic Installation
+### Automatic client installation
 
 The preferred method for installing Tinysync on clients is by using the `install.sh` script. Alternatively, you can follow the [Manual Installation](#manual-installation) procedure below.
 
@@ -107,7 +110,7 @@ The preferred method for installing Tinysync on clients is by using the `install
     sudo systemctl start autosync@YOUR_USER
     ```
 
-### Manual Installation
+### Manual client installation
 
 1. Download the software to a client, extract the archive (if applicable), and place the executable files and configuration sample in a directory of your choice (such as `/usr/local/bin`).
 
