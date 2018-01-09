@@ -63,7 +63,7 @@ services:
     image: acch/tinysync
     container_name: tinysync
     ports:
-      - 2222:22
+      - "2222:22"
     volumes:
       - ssh:/etc/ssh
       - data:/data
