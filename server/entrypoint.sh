@@ -20,4 +20,4 @@ done
 ssh-keygen -A
 
 # Start SSH Daemon in foreground
-exec /usr/sbin/sshd -D -e "$@"
+exec /usr/sbin/sshd -D -e "$@" 2>&1
