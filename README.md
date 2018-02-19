@@ -39,7 +39,7 @@ autosync.desktop | Optional desktop entry which can be used to automatically run
 
 ### Docker deployment
 
-The preferred method for setting up the Tinysync server is by running a container from the pre-built [Docker](https://www.docker.com) image [acch/tinysync](https://hub.docker.com/r/acch/tinysync). Note that you will need to supply your public SSH key when running the container.
+The preferred method for setting up the Tinysync server is by running a container from the pre-built [Docker](https://www.docker.com) image [acch/tinysync](https://hub.docker.com/r/acch/tinysync). You will need to supply your public SSH key when running the container.
 
 Using plain [Docker](https://docs.docker.com/engine/reference/run):
 
@@ -49,7 +49,8 @@ docker run --rm \
   -p 2222:22 \
   -v tinysync_ssh:/etc/ssh \
   -v tinysync_data:/data \
-  --env AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \
+  -e AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \
+  -e SYNC_DIRECTORY=mysyncdir \
   acch/tinysync
 ```
 
@@ -69,6 +70,7 @@ services:
       - data:/data
     environment:
       - AUTHORIZED_KEYS=...
+      - SYNC_DIRECTORY=mysyncdir
     restart: always
 
 volumes:
@@ -77,6 +79,8 @@ volumes:
   data:
     driver: local
 ```
+
+Note that the Docker image has a pre-defined (fixed) user named *tinysync*. The sync directory can be customized with the `SYNC_DIRECTORY` environment variable (defaults to `data`). This sync directory needs to match the `directory` setting in `sync.conf`. However, the data volume should always be mounted to `/data`.
 
 ### Manual server installation
 

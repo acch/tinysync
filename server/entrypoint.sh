@@ -7,6 +7,9 @@ then
   exit 1
 fi
 
+# Add link to sync directory
+ln -sf /data /home/tinysync/${SYNC_DIRECTORY:-data}
+
 # Add authorized keys
 IFS=$'\n'
 for key in $(echo $AUTHORIZED_KEYS | tr "," "\n")

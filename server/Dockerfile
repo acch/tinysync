@@ -10,8 +10,7 @@ RUN apk add --no-cache \
 RUN adduser -D -s /bin/ash tinysync \
 && passwd -u tinysync \
 && mkdir /data \
-&& chown tinysync:tinysync /data \
-&& ln -s /data /home/tinysync/data
+&& chown tinysync:tinysync /data
 
 # Prepare SSH config
 RUN mkdir /home/tinysync/.ssh \
