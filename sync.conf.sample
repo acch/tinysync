@@ -6,7 +6,7 @@ directory="data"
 
 # Local user account on the client used to synchronize the directory.
 # The directory must be inside the local user's home directory.
-# If no local user is specified, then the account running the script is used.
+# If no local user is specified then the account running the script is used.
 #local_user="YOUR_USER"
 
 # Remote user account on the server used to synchronize the directory.
@@ -33,7 +33,7 @@ remote_lockfile="/tmp/sync.lck"
 # Maximum number of seconds to wait when running the script (sync.sh).
 sched_wait=10
 
-# Number of seconds to wait after modification of the directory, before it is
+# Number of seconds to wait after modification of the directory before it is
 #   synchronized (autosync.sh).
 auto_wait=30
 
@@ -43,7 +43,7 @@ ssh_port=22
 # Interface which must be connected when synchronizing the directory.
 # Specify the Ethernet interface (e.g. eth0, em1) to avoid synchronization using
 #   slow / expensive mobile connections.
-# If no interface is specified, then the directory is always synchronized.
+# If no interface is specified then the directory is always synchronized.
 #interface=em1
 
 # List of events which trigger automatic synchronization of the directory
