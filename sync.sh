@@ -272,7 +272,7 @@ if [ "$force" -eq 1 ] || check_network; then
 
       # Find latest mtime in local and server copy
       local_mtime=$(find /home/$local_user/$directory -printf "%Ts\n" | sort -g | tail -n 1)
-      server_mtime=$($rsh "cat /home/$remote_user/sync.tim")
+      server_mtime=$($rsh "cat /home/$remote_user/sync.tim" || echo "0000000000")
 
       # Compare mtimes
       if [ "$local_mtime" -lt "$server_mtime" ]; then
