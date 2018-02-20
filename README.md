@@ -48,9 +48,8 @@ docker run --rm \
   --name tinysync \
   -p 2222:22 \
   -v tinysync_ssh:/etc/ssh \
-  -v tinysync_data:/data \
+  -v tinysync_data:/home/tinysync \
   -e AUTHORIZED_KEYS="$(cat ~/.ssh/id_rsa_tinysync.pub)" \
-  -e SYNC_DIRECTORY=mysyncdir \
   acch/tinysync
 ```
 
@@ -67,10 +66,9 @@ services:
       - "2222:22"
     volumes:
       - ssh:/etc/ssh
-      - data:/data
+      - data:/home/tinysync
     environment:
       - AUTHORIZED_KEYS=...
-      - SYNC_DIRECTORY=mysyncdir
     restart: always
 
 volumes:
@@ -80,7 +78,7 @@ volumes:
     driver: local
 ```
 
-Note that the Docker image has a pre-defined (fixed) user named *tinysync*. The sync directory can be customized with the `SYNC_DIRECTORY` environment variable (defaults to `data`). This sync directory needs to match the `directory` setting in `sync.conf`. However, the data volume should always be mounted to `/data`.
+Note that the Docker image has a pre-defined (fixed) user named *tinysync*. The actual data volume should always be mounted to `/home/tinysync`.
 
 ### Manual server installation
 

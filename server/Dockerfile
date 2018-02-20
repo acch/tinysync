@@ -8,9 +8,7 @@ RUN apk add --no-cache \
 
 # Create named user
 RUN adduser -D -s /bin/ash tinysync \
-&& passwd -u tinysync \
-&& mkdir /data \
-&& chown tinysync:tinysync /data
+&& passwd -u tinysync
 
 # Prepare SSH config
 RUN mkdir /home/tinysync/.ssh \
@@ -29,7 +27,7 @@ ENV AUTHORIZED_KEYS none
 COPY entrypoint.sh /
 
 # Expose volumes
-VOLUME ["/etc/ssh", "/data"]
+VOLUME ["/etc/ssh", "/home/tinysync"]
 
 # Expose ports
 EXPOSE 22
