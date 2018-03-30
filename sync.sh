@@ -6,7 +6,7 @@
 #
 # Author: acch
 # Depends: openssh, rsync
-# Version: 1.3.1
+# Version: 1.4
 #
 # To activate scheduled syncing, run this script periodically (e.g. via systemd timer)
 #
