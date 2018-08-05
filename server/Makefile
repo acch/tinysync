@@ -1,7 +1,7 @@
 DOCKER=/bin/docker
 DOCKER_IMAGE_NAME=acch/tinysync
 DOCKER_BASE_NAME=alpine
-DOCKER_BASE_VERSION=3.7
+DOCKER_BASE_VERSION=3.8
 
 default: build
 
