@@ -1,21 +1,17 @@
-DOCKER=/bin/docker
-DOCKER_IMAGE_NAME=acch/tinysync
-DOCKER_BASE_NAME=alpine
-DOCKER_BASE_VERSION=3.8
+DOCKER     := /bin/docker
+IMAGE_NAME := acch/tinysync
+IMAGE_TAG  := latest
 
-default: build
+BUILDFLAGS := --no-cache --pull
+
+default: build test
 
 build:
-	$(DOCKER) pull $(DOCKER_BASE_NAME):$(DOCKER_BASE_VERSION)
-	$(DOCKER) build -t $(DOCKER_IMAGE_NAME) .
+	$(DOCKER) build $(BUILDFLAGS) -t $(IMAGE_NAME):$(IMAGE_TAG) .
+
+test:
+	$(DOCKER) run --rm --env AUTHORIZED_KEYS="test" $(IMAGE_NAME):$(IMAGE_TAG) -t
 
 push:
 	$(DOCKER) login
-	$(DOCKER) push $(DOCKER_IMAGE_NAME)
-
-test:
-	$(DOCKER) run --rm --env AUTHORIZED_KEYS="test" $(DOCKER_IMAGE_NAME) -t
-
-clean:
-	$(DOCKER) images -qf dangling=true | xargs --no-run-if-empty $(DOCKER) rmi
-	$(DOCKER) volume ls -qf dangling=true | xargs --no-run-if-empty $(DOCKER) volume rm
+	$(DOCKER) push $(IMAGE_NAME):$(IMAGE_TAG)
