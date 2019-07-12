@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.10.1
 MAINTAINER Achim Christ
 
 # Install prerequisites
