@@ -1,4 +1,4 @@
-DOCKER     := /bin/docker
+DOCKER     := /bin/podman
 IMAGE_NAME := acch/tinysync
 IMAGE_TAG  := latest
 
