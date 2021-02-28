@@ -1,4 +1,4 @@
-FROM docker.io/alpine:3.13.1
+FROM docker.io/alpine:3.13
 MAINTAINER Achim Christ
 
 # Install prerequisites
