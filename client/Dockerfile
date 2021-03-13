@@ -4,6 +4,7 @@ FROM docker.io/ubuntu:latest
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update \
 && apt-get -qqy --no-install-recommends install \
+  ca-certificates \
   git \
   sudo \
 && rm -rf /var/lib/apt/lists/*
