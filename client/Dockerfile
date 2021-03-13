@@ -1,10 +1,9 @@
 FROM docker.io/ubuntu:latest
-MAINTAINER Achim Christ
 
 # Install prerequisites
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -qq update \
-&& apt-get -qqy install \
+&& apt-get -qqy --no-install-recommends install \
   git \
   sudo \
 && rm -rf /var/lib/apt/lists/*
