@@ -6,6 +6,9 @@ BUILDFLAGS := --no-cache --pull
 
 default: build test
 
+lint:
+	$(DOCKER) run --rm -i hadolint/hadolint < Dockerfile
+
 build:
 	$(DOCKER) build $(BUILDFLAGS) -t docker.io/$(IMAGE_NAME):$(IMAGE_TAG) .
 
