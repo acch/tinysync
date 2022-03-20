@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Tinysync - Simple tool for keeping a directory synchronized between multiple computers
