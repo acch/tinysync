@@ -17,7 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Lint
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@master
+
+      - name: Haskell Dockerfile Linter
         uses: hadolint/hadolint-action@v2.0.0
         with:
           dockerfile: server/Dockerfile
