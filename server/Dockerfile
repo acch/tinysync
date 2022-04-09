@@ -1,6 +1,7 @@
 FROM docker.io/alpine:3.15
 
 # Install prerequisites
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
   openssh \
   rsync
