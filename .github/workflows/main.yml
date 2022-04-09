@@ -33,5 +33,8 @@ jobs:
         with:
           context: server
           file: server/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/tinysync:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/tinysync:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/tinysync:buildcache,mode=max
