@@ -123,7 +123,7 @@ release_local_lock () {
 
 check_network () {
   # Check for $interface
-  if [ ! -z "$interface" ] && ! grep -q up /sys/class/net/$interface/operstate; then
+  if [ -n "$interface" ] && ! grep -q up /sys/class/net/$interface/operstate; then
     echo "[$($date)] $interface down - will exit now!" >> $logfile
     return 1
   fi
