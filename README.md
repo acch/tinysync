@@ -1,6 +1,6 @@
 # Tinysync
 
-[![GitHub Issues](https://img.shields.io/github/issues/acch/tinysync.svg)](https://github.com/acch/tinysync/issues) [![GitHub Stars](https://img.shields.io/github/stars/acch/tinysync.svg?label=github%20%E2%98%85)](https://github.com/acch/tinysync/) [![Docker Pulls](https://img.shields.io/docker/pulls/acch/tinysync.svg)](https://hub.docker.com/r/acch/tinysync/) [![License](https://img.shields.io/github/license/acch/tinysync.svg)](LICENSE)
+[![GitHub Workflow](https://img.shields.io/github/workflow/status/acch/tinysync/CI)](https://github.com/acch/tinysync/actions) [![GitHub Issues](https://img.shields.io/github/issues/acch/tinysync.svg)](https://github.com/acch/tinysync/issues) [![GitHub Stars](https://img.shields.io/github/stars/acch/tinysync.svg?label=github%20%E2%98%85)](https://github.com/acch/tinysync/stargazers) [![Docker Pulls](https://img.shields.io/docker/pulls/acch/tinysync.svg)](https://hub.docker.com/r/acch/tinysync/) [![License](https://img.shields.io/github/license/acch/tinysync.svg)](LICENSE)
 
 Tinysync is a simple tool for keeping a directory synchronized between multiple computers.
 Its primary design goal is to be small, lightweight, and not to require additional software to accomplish this task.
