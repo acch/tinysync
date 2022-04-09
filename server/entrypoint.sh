@@ -1,4 +1,5 @@
 #!/bin/ash
+# shellcheck shell=bash
 
 # Check if environment is defined
 if [ "$AUTHORIZED_KEYS" == "none" ]
@@ -9,14 +10,14 @@ fi
 
 # Add authorized keys
 IFS=$'\n'
-for key in $(echo $AUTHORIZED_KEYS | tr "," "\n")
+for key in $(echo "$AUTHORIZED_KEYS" | tr "," "\n")
 do
-  trimmed_key=$(echo $key | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+  trimmed_key=$(echo "$key" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
   if ! grep "$trimmed_key" /home/tinysync/.ssh/authorized_keys &> /dev/null
   then
     echo "Adding authorized key \"${trimmed_key}\"..."
-    echo $trimmed_key >> /home/tinysync/.ssh/authorized_keys
+    echo "$trimmed_key" >> /home/tinysync/.ssh/authorized_keys
   fi
 done
 
