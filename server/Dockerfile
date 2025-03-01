@@ -21,7 +21,7 @@ RUN mkdir /home/tinysync/.ssh \
        -e 's/^#PermitRootLogin.*$/PermitRootLogin no/' -i /etc/ssh/sshd_config
 
 # Default environment
-ENV AUTHORIZED_KEYS none
+ENV AUTHORIZED_KEYS=none
 
 # Copy run-time script
 COPY entrypoint.sh /
