@@ -11,3 +11,10 @@ updates:
       interval: weekly
     assignees:
       - acch
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    assignees:
+      - acch
