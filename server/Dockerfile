@@ -1,4 +1,4 @@
-FROM docker.io/alpine:3.21.3
+FROM docker.io/alpine:3.22.0
 
 # Install prerequisites
 # hadolint ignore=DL3018
